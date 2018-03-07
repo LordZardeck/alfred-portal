@@ -13,7 +13,7 @@ $ npm install --global alfred-portal
 
 ## Configuration
 
-This workflow requires you to setup your portal API url and API key using Alfred variables. Optionally, you can also define a custom cache lifetime. Open the "portal" workflow in Alfred and click on the "[X]" at the top-right of the screen to configure the variables.
+This workflow requires you to setup your portal API url and API key using [Alfred variables](https://www.alfredapp.com/help/workflows/advanced/variables/). Optionally, you can also define a custom cache lifetime.
 
 - portalApiUrl
 - portalApiKey
