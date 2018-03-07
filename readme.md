@@ -19,6 +19,22 @@ This workflow requires you to setup your portal API url and API key using Alfred
 - portalApiKey
 - portalCacheLifetime
 
+### Links
+
+You can define links that can be searched within an associated project. Using `portal-options`, you can edit the config
+file and specify custom links like so:
+
+```json
+{
+	"links": {
+		"<project-id>": {
+			"<link-description>": "<link-url>"
+		}
+	}
+}
+```
+
+
 
 ## Usage
 
