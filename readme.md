@@ -40,6 +40,9 @@ file and specify custom links like so:
 
 In Alfred, type `portal`, <kbd>Enter</kbd>, and your query.
 
+### Tasks
+
+You can search tasks by task id, task name, or assignee name. If you search by assignee name first, you can also search task names within that assignee
 
 ## License
 
