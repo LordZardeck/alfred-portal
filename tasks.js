@@ -1,7 +1,8 @@
 'use strict';
 const alfy = require('alfy'),
 	xml2js = new require('xml2js').Parser(),
-	Fuze = require('fuse.js');
+	Fuze = require('fuse.js'),
+	Person = require('./people');
 
 if (!process.env.portalApiUrl || !process.env.portalApiKey) {
 	alfy.error('You must specify the API url and API key in the workflow variables');
@@ -30,32 +31,56 @@ alfy.fetch(process.env.portalApiUrl, {
 	const data = response.map(task => {
 		return {
 			title: task.name.join(' '),
-			subtitle: `Open Task Number ${task.task_id}`,
-			taskId: task.task_id,
+			taskId: task.task_id[0],
+			assigneeId: task.assignee_id[0],
 			arg: task.permalink.join('')
 		};
-	});
-	const fuzeSearch = new Fuze(data, {
-		shouldSort: true,
-		threshold: 0.49,
-		location: 0,
-		distance: 100,
-		maxPatternLength: 32,
-		minMatchCharLength: 1,
-		keys: ['title']
 	});
 
 	let searchResults = data.filter(task => task.taskId.toString() === alfy.input);
 
-	if (searchResults.length === 0) {
-		searchResults = fuzeSearch.search(alfy.input);
-	}
+	searchResults.forEach(result => {
+		result.subtitle = `Open Task Number ${result.taskId}`;
+	});
 
-	if (searchResults.length === 0) {
-		searchResults = data;
-	}
+	(searchResults.length === 0 ? Person.getUserIds(alfy.input.indexOf(' ') > 0 ? alfy.input.substr(0, alfy.input.indexOf(' ')) : alfy.input) : Promise.resolve([])).then(people => {
+		const peopleObject = people.reduce((previousValue, currentValue) => {
+			previousValue[currentValue.id] = currentValue.name;
+			return previousValue;
+		}, {});
+		const peopleIds = Object.keys(peopleObject);
 
-	alfy.output(searchResults);
+		if (searchResults.length === 0) {
+			if (people.length > 0) {
+				searchResults = data.filter(task => peopleIds.indexOf(task.assigneeId) >= 0);
+
+				searchResults.forEach(result => {
+					result.subtitle = `Asignee ${peopleObject[result.assigneeId]}`.trim();
+				});
+			}
+
+			if (people.length === 0 || alfy.input.substr(alfy.input.indexOf(' ')).trim().length > 0) {
+				const fuzeSearch = new Fuze(searchResults, {
+					shouldSort: true,
+					threshold: 0.49,
+					location: 0,
+					distance: 100,
+					maxPatternLength: 32,
+					minMatchCharLength: 1,
+					keys: ['title']
+				});
+
+				searchResults = fuzeSearch.search(people.length > 0 ? alfy.input.substr(alfy.input.indexOf(' ')).trim() : alfy.input);
+			}
+		}
+
+		if (searchResults.length === 0) {
+			searchResults = data;
+		}
+
+		alfy.output(searchResults);
+	});
+
 }).catch(response => {
 	if (response.statusCode === 403) {
 		alfy.error('Your API key is invalid. Please check your key and try again.');
