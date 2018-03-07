@@ -19,6 +19,7 @@
   },
   "files": [
     "index.js",
+    "people.js",
     "clear-cache.js",
     "discussions.js",
     "links.js",
