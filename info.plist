@@ -289,7 +289,7 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string></string>
+				<string>Gettings Tasks From Portal</string>
 				<key>script</key>
 				<string>./node_modules/.bin/run-node tasks.js "$1"</string>
 				<key>scriptargtype</key>
@@ -482,7 +482,7 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string></string>
+				<string>Getting Discussions from Portal</string>
 				<key>script</key>
 				<string>./node_modules/.bin/run-node discussions.js "$1"</string>
 				<key>scriptargtype</key>

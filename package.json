@@ -19,6 +19,10 @@
   },
   "files": [
     "index.js",
+    "clear-cache.js",
+    "discussions.js",
+    "links.js",
+    "tasks.js",
     "icon.png",
     "info.plist"
   ],
